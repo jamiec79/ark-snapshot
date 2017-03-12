@@ -1,3 +1,4 @@
+#!/bin/bash
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
 ARK Blockchain Snapshot Script
