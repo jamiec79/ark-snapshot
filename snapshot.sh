@@ -29,9 +29,9 @@ Save the file with Ctrl+x and Y when you're done
 
 VARIABLES
 
-DB_NAME="ark_testnet"
+DB_NAME="test_swapblocks"
 HEIGHT="$(psql -d $DB_NAME -t -c 'select height from blocks order by height desc limit 1;' | xargs)"
-NODE_DIR="$HOME/ark-node"
+NODE_DIR="$HOME/swapblocks-node"
 EXPLORER_DIR="$HOME/ark-explorer"
 PUBLIC_DIR="$HOME/ark-explorer/public"
 SNAPDIR="snapshots"
@@ -40,11 +40,11 @@ DATE=date +%Y-%m-%d\ %H:%M:%S
 
 #~ SEED NODES ~#
 
-seed0=("5.39.9.245:4000" "seed01")
-seed1=("5.39.9.246:4000" "seed02")
-seed2=("5.39.9.247:4000" "seed03")
-seed3=("5.39.9.248:4000" "seed04")
-seed4=("5.39.9.249:4000" "seed05")
+seed0=("136.144.141.118:4111" "seed01")
+seed1=("164.132.216.107:4111" "seed02")
+seed2=("167.99.82.39:4111" "seed03")
+#seed3=("5.39.9.248:4000" "seed04")
+#seed4=("5.39.9.249:4000" "seed05")
 
 #~ API CALL ~#
 
@@ -52,7 +52,7 @@ apicall="/api/loader/status/sync"
 
 #~ ARRAYS ~#
 
-declare -a nodes=(seed0[@] seed1[@] seed2[@] seed3[@] seed4[@])
+declare -a nodes=(seed0[@] seed1[@] seed2[@])
 declare -a height=()
 
 Get array length
@@ -88,7 +88,7 @@ echo "$DATE -- Snapshot process started" >> $LOG
 
 [ -d $PUBLIC_DIR/$SNAPDIR ] && echo "$DATE -- Snapshot directory exists" >> $LOG || mkdir $PUBLIC_DIR/$SNAPDIR
 
-node=pgrep -a "node" | grep ark-node | awk '{print $1}'
+node=pgrep -a "node" | grep swapblocks-node | awk '{print $1}'
 
 if [ "$node" == "" ] ; then
     node=0
@@ -113,7 +113,7 @@ else
         forever --plain stop $forever_process >> $LOG 2>&1
         sleep 1
         echo "$DATE -- Dump of $DB_NAME at height $HEIGHT started" >> $LOG
-        pg_dump -O ark_testnet -Fc -Z6 > $PUBLIC_DIR/$SNAPDIR/$DB_NAME"_"$HEIGHT
+        pg_dump -O testnet_swapblocks -Fc -Z6 > $PUBLIC_DIR/$SNAPDIR/$DB_NAME"_"$HEIGHT
         echo "$DATE -- Dump of $DB_NAME at height $HEIGHT finished" >> $LOG
         sleep 1
         echo "$DATE -- Relinking CURRENT to $DB_NAME"_"$HEIGHT" >> $LOG
